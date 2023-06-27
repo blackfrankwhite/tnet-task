@@ -9,6 +9,20 @@ use App\Models\Role;
 
 class UsersTableSeeder extends Seeder
 {
+    private $users = [
+        [
+            'name' => 'Super Administrator',
+            'email' => 'superadmin@example.com',
+            'password' => 'admin123',
+            'role' => 'SuperAdministrator'
+        ],
+        [
+            'name' => 'test user',
+            'email' => 'test@example.com',
+            'password' => 'test123',
+            'role' => 'user'
+        ]
+    ];
     /**
      * Run the database seeds.
      */
@@ -17,16 +31,18 @@ class UsersTableSeeder extends Seeder
 
         if (User::count() == 0) {
 
-            $user = User::create([
-                'name' => 'Super Administrator',
-                'email' => 'superadmin@example.com',
-                'password' => \Hash::make('admin123'),  
-            ]);
-
-            $role = Role::where('name', 'SuperAdministrator')->first();
-            if ($role) {
-                $user->roles()->attach($role);
-            }
+            foreach ($this->users as $user) {
+                $user = User::create([
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                    'password' => \Hash::make($user['password'])
+                ]);
+    
+                $role = Role::where('name', $user['role'])->first();
+                if ($role) {
+                    $user->roles()->attach($role);
+                }
+            }            
         }
     }
 }

@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function group()
+    {
+        return $this->belongsTo('App\Models\UserProductGroup', 'user_id');
+    }
 }
